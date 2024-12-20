@@ -119,3 +119,17 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+#- Configuration block for reference data
+refdata:
+  #- Whether or not to mount cloud-hosted Galaxy reference data and tools.
+  enabled: false
+  #-`cvmfs` is the default and recommended for the time being.
+  type: cvmfs
+  pvc:
+    size: 10Gi
+
+#- Configuration block if `cvmfs` is used as `refdata.type`
+cvmfs:
+  #- The Galaxy-CVMFS-CSI Helm Chart should have been deployed separately as a cluster-wide resource
+  storageClassName: "galaxy-cvmfs"
