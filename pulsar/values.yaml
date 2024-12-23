@@ -133,3 +133,6 @@ refdata:
 cvmfs:
   #- The Galaxy-CVMFS-CSI Helm Chart should have been deployed separately as a cluster-wide resource
   storageClassName: "galaxy-cvmfs"
+
+#- API key for Pulsar
+api_key: change_me_asap
