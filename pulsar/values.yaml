@@ -136,3 +136,16 @@ cvmfs:
 
 #- API key for Pulsar
 api_key: change_me_asap
+
+#- When this flag is set to true, all configs will be set in secrets,
+#- when it is set to false, all configs will be set in configmaps
+useSecretConfigs: false
+
+#- All config files will be mapped into the `/pulsar/` directory
+configs:
+  #- Pulsar configuration. See the [Galaxy documentation](https://docs.galaxyproject.org/en/master/admin/config.html)
+  #- for more information.
+  app.yml:
+    conda_auto_init: false
+    conda_auto_install: false
+  # server.ini: |
