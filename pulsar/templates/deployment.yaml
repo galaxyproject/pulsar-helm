@@ -13,10 +13,11 @@ spec:
       {{- include "pulsar.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/pulsar_conf: {{ include (print $.Template.BasePath "/configs-pulsar.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "pulsar.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
@@ -50,6 +51,13 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            {{- range $key,$entry := .Values.configs }}
+            {{ if $entry -}}
+            - name: pulsar-conf-files
+              mountPath: /pulsar/{{ $key }}
+              subPath: {{ $key }}
+            {{- end -}}
+            {{- end }}
             {{- if .Values.refdata.enabled }}
             - name: refdata-pulsar
               mountPath: /cvmfs/data.galaxyproject.org
@@ -63,6 +71,14 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
+        - name: pulsar-conf-files
+          {{- if .Values.useSecretConfigs }}
+          secret:
+            secretName: {{ template "pulsar.fullname" . }}-configs
+          {{- else }}
+          configMap:
+            name: {{ template "pulsar.fullname" . }}-configs
+          {{- end }}
         {{- if $.Values.refdata.enabled }}
         - name: refdata-pulsar
           persistentVolumeClaim:
