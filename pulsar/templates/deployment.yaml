@@ -59,7 +59,7 @@ spec:
             {{- end -}}
             {{- end }}
             {{- if .Values.refdata.enabled }}
-            - name: refdata-pulsar
+            - name: pulsar-refdata
               mountPath: /cvmfs/data.galaxyproject.org
             {{- if eq .Values.refdata.type "cvmfs" }}
               subPath: data.galaxyproject.org
@@ -80,7 +80,7 @@ spec:
             name: {{ template "pulsar.fullname" . }}-configs
           {{- end }}
         {{- if $.Values.refdata.enabled }}
-        - name: refdata-pulsar
+        - name: pulsar-refdata
           persistentVolumeClaim:
             claimName: {{ template "pulsar.fullname" $ -}}-refdata-pvc
         {{- end }}
