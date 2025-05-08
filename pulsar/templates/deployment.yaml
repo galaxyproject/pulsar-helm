@@ -77,7 +77,15 @@ spec:
             - name: dind-sock
               mountPath: /var/run
         - name: dind
-          image: docker:28.0.1-dind
+          image: docker:dind
+          env:
+            # should match docker group id in pulsar docker container
+            - name: DOCKER_GROUP_GID
+              value: "11001"
+          args:
+            - dockerd
+            - --host=unix:///var/run/docker.sock
+            - --group=$(DOCKER_GROUP_GID)
           securityContext:
             privileged: true
           volumeMounts:
